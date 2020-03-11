@@ -5,33 +5,25 @@ from matplotlib import pyplot as plt
 time=1           # 計測時間[s]
 samplerate = 44100  # サンプリングレート
 fs = 1024           # フレームサイズ
-index = 1           # マイクのチャンネル指標
+index = 1           # マイクのチャンネル
 
 def record(index, samplerate, fs, time):
     pa = pyaudio.PyAudio()
     data = []
     dt = 1 / samplerate
     
-    # ストリームの開始
-    stream = pa.open(format=pyaudio.paInt16, channels=1, rate=samplerate,
+        stream = pa.open(format=pyaudio.paInt16, channels=1, rate=samplerate,
                      input=True, input_device_index=index, frames_per_buffer=fs)
     
-    # フレームサイズ毎に音声を録音していくループ
     for i in range(int(((time / dt) / fs))):
         frame = stream.read(fs)
         data.append(frame)
 
-    # ストリームの終了
     stream.stop_stream()
     stream.close()
     pa.terminate()
-    
-    # データをまとめる処理
     data = b"".join(data)
     
-    # データをNumpy配列に変換
-    # data = np.frombuffer(data, dtype="int16") / float((np.power(2, 16) / 2) - 1)
-
     return data, i
 
 wfm, i = record(index, samplerate, fs, time)
