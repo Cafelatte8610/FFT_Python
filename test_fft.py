@@ -2,10 +2,9 @@ import pyaudio
 import numpy as np
 from matplotlib import pyplot as plt
 
-time=1           # 計測時間[s]
+time=1           # 時間[s]
 samplerate = 44100  # サンプリングレート
 fs = 1024           # フレームサイズ
-index = 1           # マイクのチャンネル
 
 def record(index, samplerate, fs, time):
     pa = pyaudio.PyAudio()
@@ -26,7 +25,7 @@ def record(index, samplerate, fs, time):
     
     return data, i
 
-wfm, i = record(index, samplerate, fs, time)
+wfm, i = record( 1, samplerate, fs, time)
 plt.figure(figsize=(15,3))
 plt.xlabel('time [s]',fontsize="10")
 npwfm=np.frombuffer(wfm, dtype="int16")
